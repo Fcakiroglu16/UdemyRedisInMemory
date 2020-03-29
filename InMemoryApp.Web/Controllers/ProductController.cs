@@ -25,6 +25,8 @@ namespace InMemoryApp.Web.Controllers
             options.AbsoluteExpiration = DateTime.Now.AddMinutes(1);
 
             options.SlidingExpiration = TimeSpan.FromSeconds(10);
+            options.Priority = CacheItemPriority.High;
+
             _memoryCache.Set<string>("zaman", DateTime.Now.ToString(), options);
 
             return View();
