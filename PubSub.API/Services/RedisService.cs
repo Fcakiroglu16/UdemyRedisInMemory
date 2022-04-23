@@ -20,9 +20,21 @@ namespace PubSub.API.Services
 
         public void Connect()
         {
-            var configString = $"{_redisHost}:{_redisPort}";
+            //1.yol
+            // var configString = $"{_redisHost}:{_redisPort}";
 
-            _redis = ConnectionMultiplexer.Connect(configString);
+            // _redis = ConnectionMultiplexer.Connect(configString);
+
+            //2.yol
+
+            ConfigurationOptions options = new ConfigurationOptions
+            {
+                EndPoints = { { "localhost", 6379 } }
+
+
+            };
+            _redis = ConnectionMultiplexer.Connect(options);
+
         }
 
         public IDatabase GetDb(int db) => _redis.GetDatabase(db);

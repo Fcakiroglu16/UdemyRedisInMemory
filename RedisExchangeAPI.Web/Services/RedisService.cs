@@ -25,9 +25,21 @@ namespace RedisExchangeAPI.Web.Services
 
         public void Connect()
         {
+            //1.yol
+            //   _redis = ConnectionMultiplexer.Connect("localhost"); //direk olarak localhost 6379 bağlanır
+
+            //2.yol
+
             var configString = $"{_redisHost}:{_redisPort}";
 
-            _redis = ConnectionMultiplexer.Connect(configString);
+            //_redis = ConnectionMultiplexer.Connect(configString);
+
+            //3.yol sentinel
+            //     _redis = ConnectionMultiplexer.Connect("localhost:26379,serviceName=mymaster,abortConnect=false");
+
+
+
+
         }
 
         public IDatabase GetDb(int db)

@@ -21,6 +21,8 @@ namespace PubSub.API.Controllers
         public async Task<IActionResult> Publisher()
         {
 
+
+
             var pubSub = _redisService.GetConnection.GetSubscriber();
             await pubSub.PublishAsync("channel1", new RedisValue("message from API"), CommandFlags.FireAndForget);
             return Ok();

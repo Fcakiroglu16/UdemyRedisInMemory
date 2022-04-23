@@ -22,6 +22,8 @@ namespace RedisExchangeAPI.Web.Controllers
 
         public IActionResult Index()
         {
+            //geri dönüş  çok önemli olmadığı zaman kullanılır.
+            // db.StringSet("a","b",flags:CommandFlags.FireAndForget);
             db.StringSet("name", "Fatih Çakıroğlu");
             db.StringSet("ziyaretci", 100);
 
@@ -30,7 +32,7 @@ namespace RedisExchangeAPI.Web.Controllers
 
         public IActionResult Show()
         {
-            var value = db.StringLength("name");
+            var value = db.StringGet("name");
 
             // db.StringIncrement("ziyaretci", 10);
 
