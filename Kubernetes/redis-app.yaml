@@ -1,0 +1,46 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netcore-redis-app
+  labels:
+    app: netcore-redis-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netcore-redis-app
+  template:
+    metadata:
+      labels:
+        app: netcore-redis-app
+    spec:
+      containers:
+      - name: netcore-app
+        image: redisapp-sentinel-connection:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        env:
+        - name: REDIS_SENTINEL_HOST
+          value: "redis-sentinel"
+        - name: REDIS_SENTINEL_PORT
+          value: "26379"
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netcore-redis-app-service
+spec:
+  selector:
+    app: netcore-redis-app
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: ClusterIP
