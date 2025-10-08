@@ -1,14 +1,22 @@
-﻿using RedisExample;
+﻿using Microsoft.Extensions.Options;
+using RedisExample.RedisConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddOptions<RedisOption>().BindConfiguration(nameof(RedisOption)).ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services.AddSingleton<RedisOption>(sp => sp.GetRequiredService<IOptions<RedisOption>>().Value);
 
 
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<RedisService>(sp =>
 {
     var logger = sp.GetRequiredService<ILogger<RedisService>>();
-    return new RedisService(builder.Configuration.GetSection("RedisOption")["Sentinel1:Host"]!,
-        builder.Configuration.GetSection("RedisOption")["Sentinel1:Port"]!, logger);
+
+    var redisOption = sp.GetRequiredService<RedisOption>();
+    return new RedisService(redisOption, logger);
 });
 
 var app = builder.Build();
