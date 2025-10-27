@@ -1,4 +1,8 @@
-﻿using StackExchange.Redis;
+﻿#region
+
+using StackExchange.Redis;
+
+#endregion
 
 namespace RedisExample;
 
@@ -8,7 +12,7 @@ public class RedisService
 
     public RedisService(string redisSentinelHost, string redisSentinelPort, ILogger<RedisService> logger)
     {
-        var connectionString = $"{redisSentinelHost}:{redisSentinelPort},serviceName=mymaster,password=admin";
+        var connectionString = $"{redisSentinelHost}:{redisSentinelPort}";
 
         _connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
 
@@ -17,19 +21,6 @@ public class RedisService
         else
             logger.LogError("Failed to connect to Redis Sentinel at {Host}:{Port}", redisSentinelHost,
                 redisSentinelPort);
-
-        _connectionMultiplexer.ConnectionRestored += (sender, args) =>
-        {
-            logger.LogInformation("Redis Sentinel reconnected");
-        };
-        _connectionMultiplexer.ConnectionFailed += (sender, args) =>
-        {
-            logger.LogError("Redis Sentinel connection failed: {FailureType}", args.FailureType);
-        };
-        _connectionMultiplexer.ErrorMessage += (sender, args) =>
-        {
-            logger.LogError("Redis Sentinel error: {Message}", args.Message);
-        };
     }
 
 

@@ -1,4 +1,8 @@
-﻿using RedisExample;
+﻿#region
+
+using RedisExample;
+
+#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +18,7 @@ builder.Services.AddSingleton<RedisService>(sp =>
 var app = builder.Build();
 
 
-app.MapGet("api/redis-sentinel-check", (RedisService redisService) =>
+app.MapGet("api/check", (RedisService redisService) =>
 {
     var db = redisService.GetDb(0);
 
