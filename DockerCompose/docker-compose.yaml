@@ -1,20 +1,14 @@
 ﻿# Docker Compose dosya formatı sürümü
-version: '3.8'
 
 services:
   # Servisimizin adı (istediğiniz bir şey olabilir)
   redis-aof-server:
-
-    # Resmi Redis imajını kullanıyoruz. 'alpine' sürümü daha küçüktür.
     image: redis:7-alpine
-    
-    # Konteynere sabit bir isim verelim (kolay erişim için)
     container_name: my-redis-aof
-    
     # --- AOF (Kalıcılık) için En Önemli Kısım ---
     # Konteyner başladığında çalıştırılacak komut.
     # redis-server'ı --appendonly yes bayrağıyla çalıştırarak AOF modunu zorluyoruz.
-    # command: redis-server --appendonly yes
+    command: redis-server --save "" --appendonly no
     ports:
     - 6379:6379
       
@@ -29,3 +23,30 @@ services:
 # Docker'a 'redis-data' adında bir volume yönetmesini söylüyoruz.
 volumes:
   redis-data:
+  
+  
+
+
+#   1. Yöntem: command ile Saniyeyi Değiştirmek
+# Redis'in --save parametresi <saniye> <değişiklik_sayısı> formatında çalışır.
+
+# Örneğin, varsayılan ayarlar şunlardır:
+
+# save 900 1 (900 saniyede en az 1 değişiklik olursa)
+
+# save 300 10 (300 saniyede en az 10 değişiklik olursa)
+
+# save 60 10000 (60 saniyede en az 10000 değişiklik olursa)
+
+# command: redis-server --save 60 1
+
+
+
+
+
+
+#command: redis-server --save "" --appendonly no Bu satır, container başladığında çalışacak varsayılan komutu değiştirir ve redis-server'ı bizim istediğimiz ayarlarla başlatır.
+
+#--save "" Bu, RDB snapshot alma kurallarını sıfırlar. Normalde Redis'in "900 saniyede 1 değişiklik olursa" gibi varsayılan kuralları vardır. "" (boş bir dize) göndererek Redis'e "hiçbir zaman snapshot alma" demiş olursunuz.
+
+#--appendonly no Bu, AOF (Append Only File) özelliğinin kapalı olmasını açıkça garanti eder (bu zaten varsayılan ayarıdır, ancak emin olmak için eklemek iyidir).

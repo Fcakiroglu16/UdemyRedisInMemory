@@ -11,7 +11,7 @@ public class RedisConsumerBackgroundService(RedisService redisService, ILogger<R
 {
     private const string StreamName = "my-stream";
 
-    private const string GroupName = "my-consumer-group";
+    private const string GroupName = "my-consumer-group16";
 
     // Bu tüketici (worker) için benzersiz bir isim
     private readonly string _consumerName = $"consumer-{Environment.ProcessId}";

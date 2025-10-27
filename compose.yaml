@@ -1,7 +1,0 @@
-﻿services:
-  redisexample:
-    image: redisapp-sentinel-connection:latest
-    build:
-      context: .
-      dockerfile: RedisExample/Dockerfile
-
