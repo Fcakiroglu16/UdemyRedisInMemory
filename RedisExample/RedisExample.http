@@ -2,5 +2,6 @@
 
 GET {{RedisExample_HostAddress}}/api/redis-stream-publisher
 Accept: application/json
-
 ###
+GET {{RedisExample_HostAddress}}/api/api/redis-stream-publisher-error
+Accept: application/json
