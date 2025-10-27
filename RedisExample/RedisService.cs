@@ -24,7 +24,7 @@ public class RedisService
     }
 
 
-    public IDatabase? Db { get; set; }
+    private IDatabase? Db { get; set; }
 
 
     public IDatabase GetDb(int dbIndex)

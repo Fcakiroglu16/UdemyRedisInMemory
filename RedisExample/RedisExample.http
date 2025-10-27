@@ -1,6 +1,6 @@
 @RedisExample_HostAddress = http://localhost:5204
 
-GET {{RedisExample_HostAddress}}/api/check/
+GET {{RedisExample_HostAddress}}/api/redis-stream-publisher
 Accept: application/json
 
 ###
