@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9"/>
-        <PackageReference Include="StackExchange.Redis" Version="2.9.25"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+        <PackageReference Include="StackExchange.Redis" Version="2.9.25" />
     </ItemGroup>
 
     <ItemGroup>

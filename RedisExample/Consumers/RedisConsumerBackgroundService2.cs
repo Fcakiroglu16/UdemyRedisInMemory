@@ -4,14 +4,12 @@ using StackExchange.Redis;
 
 #endregion
 
-namespace RedisExample;
+namespace RedisExample.Consumers;
 
-public class RedisConsumerBackgroundServiceErrorExample(
-    RedisService redisService,
-    ILogger<RedisConsumerBackgroundServiceErrorExample> logger)
+public class RedisConsumerBackgroundService2(RedisService redisService, ILogger<RedisConsumerBackgroundService2> logger)
     : BackgroundService
 {
-    private const string StreamName = "my-stream-error";
+    private const string StreamName = "my-stream";
 
     private const string GroupName = "my-consumer-group";
 
@@ -61,13 +59,11 @@ public class RedisConsumerBackgroundServiceErrorExample(
                 //logger.LogInformation("Yeni mesaj yok, bekleniyor...");
                 continue;
 
-            logger.LogInformation("{Count} adet yeni mesaj işleniyor...", entries.Length);
+            //logger.LogInformation("{Count} adet yeni mesaj işleniyor...", entries.Length);
 
             foreach (var entry in entries)
             {
-                logger.LogInformation("--> Mesaj ID: {MessageId}", entry.Id);
-
-
+                //logger.LogInformation("--> Mesaj ID: {MessageId}", entry.Id);
                 var messageContent = entry.Values.FirstOrDefault(x => x.Name == "message_content").Value;
                 logger.LogInformation("    İçerik: {Content}", messageContent);
                 await database.StreamAcknowledgeAsync(StreamName, GroupName, entry.Id);
