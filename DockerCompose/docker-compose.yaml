@@ -1,0 +1,31 @@
+﻿# Docker Compose dosya formatı sürümü
+version: '3.8'
+
+services:
+  # Servisimizin adı (istediğiniz bir şey olabilir)
+  redis-aof-server:
+
+    # Resmi Redis imajını kullanıyoruz. 'alpine' sürümü daha küçüktür.
+    image: redis:7-alpine
+    
+    # Konteynere sabit bir isim verelim (kolay erişim için)
+    container_name: my-redis-aof
+    
+    # --- AOF (Kalıcılık) için En Önemli Kısım ---
+    # Konteyner başladığında çalıştırılacak komut.
+    # redis-server'ı --appendonly yes bayrağıyla çalıştırarak AOF modunu zorluyoruz.
+    # command: redis-server --appendonly yes
+    ports:
+    - 6379:6379
+      
+    volumes:
+      # --- Verilerin Kalıcılığı için En Önemli Kısım ---
+      # 'redis-data' adında bir "named volume" oluşturuyoruz.
+      # Bu volume, Redis'in veri dizini olan '/data' klasörüne bağlanıyor.
+      # AOF dosyası (appendonly.aof) bu klasörde saklanır.
+      # 'docker-compose down' yapsanız bile bu volume silinmez.
+      - redis-data:/data
+
+# Docker'a 'redis-data' adında bir volume yönetmesini söylüyoruz.
+volumes:
+  redis-data:
