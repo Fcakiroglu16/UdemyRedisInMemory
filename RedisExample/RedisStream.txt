@@ -1,0 +1,31 @@
+﻿// Pub/Sub Pattern Matching Yaklaşımı
+await _subscriber.SubscribeAsync(
+    new RedisChannel("user.*", RedisChannel.PatternMode.Pattern),
+    handler
+);
+
+// Stream Alternatifi - Birden fazla stream'i tek seferde okuma
+var entries = await database.StreamReadAsync(
+    new[]
+    {
+        new StreamPosition("user.login", ">"),
+        new StreamPosition("user.logout", ">"),
+        new StreamPosition("user.register", ">")
+    }
+);
+
+
+
+// Birden fazla stream'den Consumer Group ile okuma
+var streamPositions = new[]
+{
+    new StreamPosition("order.product.created", ">"),
+    new StreamPosition("order.service.created", ">")
+};
+
+var entries = await database.StreamReadGroupAsync(
+    streamPositions,
+    "my-consumer-group",
+    "consumer-1",
+    count: 10
+);
