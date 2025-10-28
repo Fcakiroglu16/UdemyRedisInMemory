@@ -1,0 +1,23 @@
+Redis Pub/Sub Nedir?
+•	Publisher (Yay?nc?): Mesajlar? belirli kanallara yay?nlar
+•	Subscriber (Abone): Belirli kanallar? dinler ve mesajlar? al?r
+•	Channel (Kanal): Mesajlar?n yay?nland??? ve dinlendi?i isimlendirilmi? kanallar
+•	Pattern Subscribe: Joker karakter (wildcard) kullanarak birden fazla kanala abone olma
+Önemli Özellikler
+? Fire-and-forget: Mesajlar kal?c? de?il, sadece o anda dinleyenlere ula??r
+? Dü?ük latency: Gerçek zamanl? ileti?im için idealdir
+? Fan-out pattern: Bir mesaj birden fazla aboneye ula??r
+? Mesaj garantisi yok: Abone offline ise mesaj? kaybeder
+? Mesaj s?ras? garantisi yok: Yüksek yük alt?nda s?ralama bozulabilir
+? Acknowledgement yok: Mesaj?n al?nd???na dair onay sistemi yok
+
+
+
+Özellik				Pub/Sub		Stream
+Mesaj Kal?c?l???	? Hay?r	? Evet
+Consumer Groups		? Yok		? Var
+Mesaj Geçmi?i		? Yok		? Var
+Acknowledgement		? Yok		? Var
+Performance			? Çok H?zl?	?? Biraz Daha Yava?
+Use Case			Real-time events	Message Queue
+Message Delivery	At-most-once	At-least-once

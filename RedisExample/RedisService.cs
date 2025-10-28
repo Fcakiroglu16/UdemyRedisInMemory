@@ -31,4 +31,9 @@ public class RedisService
     {
         return _connectionMultiplexer!.GetDatabase(dbIndex);
     }
+
+    public ISubscriber GetSubscriber()
+    {
+        return _connectionMultiplexer!.GetSubscriber();
+    }
 }

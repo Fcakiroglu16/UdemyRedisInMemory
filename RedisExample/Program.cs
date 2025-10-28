@@ -2,6 +2,8 @@
 
 using RedisExample;
 using RedisExample.Consumers;
+using RedisExample.PubSubExamples;
+using RedisExample.PubSubExamples.EventDrivenArchitecture;
 using StackExchange.Redis;
 
 #endregion
@@ -20,6 +22,18 @@ builder.Services.AddHostedService<RedisConsumerBackgroundService>();
 builder.Services.AddHostedService<RedisConsumerBackgroundService2>();
 builder.Services.AddHostedService<RedisConsumerBackgroundServiceErrorExample>();
 builder.Services.AddHostedService<StuckMessageRecoveryService>();
+builder.Services.AddHostedService<SimplePubSubSubscriber>();
+builder.Services.AddHostedService<SimplePubSubSubscriber2>();
+builder.Services.AddSingleton<SimplePubSubPublisher>();
+
+builder.Services.AddHostedService<PatternSubscriber>();
+
+
+builder.Services.AddSingleton<EventBus>();
+builder.Services.AddHostedService<InventoryServiceEventHandlers>();
+builder.Services.AddHostedService<OrderServiceEventHandlers>();
+
+
 var app = builder.Build();
 
 
@@ -125,6 +139,46 @@ app.MapGet("api/redis-stream-publisher-error", (RedisService redisService) =>
 
         var messageId = await db.StreamAddAsync(StreamName, values);
     });
+});
+
+
+app.MapGet("api/pubsub/publish", async (SimplePubSubPublisher publisher) =>
+{
+    // Kullanıcı olayları
+    await publisher.PublishMessageAsync("user.login", "User123 logged in");
+    await publisher.PublishMessageAsync("user.logout", "User123 logged out");
+    await publisher.PublishMessageAsync("user.register", "NewUser456 registered");
+
+    // Sipariş olayları
+    await publisher.PublishMessageAsync("order.product.created", "{orderId: 1001}");
+    await publisher.PublishMessageAsync("order.service.created", "{orderId: 1002}");
+
+    // Hata logları
+    await publisher.PublishMessageAsync("logs.api.error", "500 Internal Server Error");
+    await publisher.PublishMessageAsync("logs.payment.error", "Payment gateway timeout");
+
+    //Enumerable.Range(1, 10).ToList().ForEach(async i =>
+    //{
+    //    var message = $"Hello world {i}";
+    //    await publisher.PublishMessageAsync("notifications", message);
+    //});
+
+    return Results.Ok(new { success = true });
+});
+
+
+app.MapPost("api/events/order/create", async (
+    EventBus eventBus) =>
+{
+    await eventBus.PublishAsync(new OrderCreatedEvent("abc", 100));
+    return Results.Ok(new { message = "Order created event published" });
+});
+
+app.MapPost("api/events/payment/process", async (
+    EventBus eventBus) =>
+{
+    await eventBus.PublishAsync(new PaymentProcessedEvent("abc", "abc", true));
+    return Results.Ok(new { message = "Payment processed event published" });
 });
 
 

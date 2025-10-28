@@ -5,3 +5,16 @@ Accept: application/json
 ###
 GET {{RedisExample_HostAddress}}/api/redis-stream-publisher-error
 Accept: application/json
+###
+GET {{RedisExample_HostAddress}}/api/pubsub/publish
+Accept: application/json
+###
+POST {{RedisExample_HostAddress}}/api/events/order/create
+Accept: application/json
+###
+POST {{RedisExample_HostAddress}}/api/events/payment/process
+Accept: application/json
+
+
+
+
