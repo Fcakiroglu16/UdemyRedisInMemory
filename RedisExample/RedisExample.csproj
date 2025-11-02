@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    <PackageReference Include="RedLock.net" Version="2.3.2" />
     <PackageReference Include="StackExchange.Redis" Version="2.9.25" />
   </ItemGroup>
 

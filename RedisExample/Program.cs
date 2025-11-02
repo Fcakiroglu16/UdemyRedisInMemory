@@ -1,4 +1,9 @@
-﻿using StackExchange.Redis;
+﻿#region
+
+using RedisExample.BackgroundService;
+using StackExchange.Redis;
+
+#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,15 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddHostedService<DistributedLockOneBackgroundService>();
+builder.Services.AddHostedService<DistributedLockTwoBackgroundService>();
 var app = builder.Build();
 // Redis'e bağlan
 var redis = ConnectionMultiplexer.Connect("localhost:6379"); // Redis sunucunuzun adresi
 var db = redis.GetDatabase();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
 app.UseHttpsRedirection();
 
@@ -138,7 +142,7 @@ app.MapGet("/hash", async () =>
 
     // Yaş alanını 1 artırma
     // redis-cli: HINCRBY user:2 age 1
-    await db.HashIncrementAsync(key, "age", 1);
+    await db.HashIncrementAsync(key, "age");
     var newAge = await db.HashGetAsync(key, "age");
 
     return Results.Ok(new
@@ -177,8 +181,7 @@ app.MapGet("/sortedset", async () =>
 
     return Results.Ok(topPlayers.Select(p => new
     {
-        Player = p.Element.ToString(),
-        Score = p.Score
+        Player = p.Element.ToString(), p.Score
     }).ToList());
 });
 
@@ -305,10 +308,7 @@ app.MapPost("/rdb-backup", async () =>
     // ConnectionMultiplexer üzerinden mevcut sunucu endpoint'lerini alıyoruz.
     // Genellikle tek bir sunucu olduğu için FirstOrDefault() yeterlidir.
     var server = redis.GetServer(redis.GetEndPoints().FirstOrDefault());
-    if (server is null)
-    {
-        return Results.Problem("Redis sunucusu bulunamadı.");
-    }
+    if (server is null) return Results.Problem("Redis sunucusu bulunamadı.");
 
     // 2. Adım: Arka planda yedekleme (BGSAVE) komutu gönderilir.
     // SaveType.BackgroundSave, Redis'in yeni bir process oluşturarak
