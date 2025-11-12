@@ -593,7 +593,7 @@ public class RedisDataTypesReference
         // Not: Redis CLI'de longitude (boylam) önce gelir!
         await _db.GeoAddAsync(geoKey, new GeoEntry[]
         {
-            new(38.115556, 13.361389, "Palermo"),    // C#'ta latitude önce
+            new(38.115556, 13.361389, "Palermo"), // C#'ta latitude önce
             new(37.502669, 15.087269, "Catania")
         });
 
@@ -804,6 +804,9 @@ public class RedisDataTypesReference
         // Redis CLI: RENAMENX old_key new_key
         var renamed = await _db.KeyRenameAsync("old_key", "new_key", When.NotExists);
 
-        // ========== KEYS: Pattern'e uyan key'leri listeleme ==========
-        // Redis CLI: KEYS user:* (production'da kullanılmamalı!)
-        // Not: StackExchange.Redis'te 
+ 
+    }
+
+#endregion
+}
+
