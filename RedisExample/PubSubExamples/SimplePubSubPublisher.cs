@@ -1,5 +1,6 @@
 ﻿#region
 
+using RedisExample.PubSubExamples.Events;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -29,5 +30,23 @@ public class SimplePubSubPublisher(RedisService redisService, ILogger<SimplePubS
     {
         var json = JsonSerializer.Serialize(data);
         await PublishMessageAsync(channel, json);
+    }
+
+    public async Task PublishUserCreatedEventAsync(UserCreatedEvent userEvent)
+    {
+        var json = JsonSerializer.Serialize(userEvent, new JsonSerializerOptions 
+        { 
+            WriteIndented = true 
+        });
+        
+        var subscriberCount = await _subscriber.PublishAsync(
+            new RedisChannel("user.created", RedisChannel.PatternMode.Literal),
+            json
+        );
+
+        logger.LogInformation(
+            "🎉 UserCreated event published - UserId: {UserId}, UserName: {UserName}, Subscribers: {Count}",
+            userEvent.UserId, userEvent.UserName, subscriberCount
+        );
     }
 }

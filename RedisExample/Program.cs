@@ -144,6 +144,29 @@ app.MapGet("api/redis-check", (RedisService redisService) =>
 // });
 
 
+
+
+// app.MapPost("api/events/order/create", async (
+//     EventBus eventBus) =>
+// {
+//     await eventBus.PublishAsync(new OrderCreatedEvent("abc", 100));
+//     return Results.Ok(new { message = "Order created event published" });
+// });
+//
+// app.MapPost("api/events/payment/process", async (
+//     EventBus eventBus) =>
+// {
+//     await eventBus.PublishAsync(new PaymentProcessedEvent("abc", "abc", true));
+//     return Results.Ok(new { message = "Payment processed event published" });
+// });
+
+
+
+
+
+
+
+
 app.MapGet("api/pubsub/publish", async ([FromServices]SimplePubSubPublisher publisher) =>
 {
     // // Kullanıcı olayları
@@ -168,20 +191,28 @@ app.MapGet("api/pubsub/publish", async ([FromServices]SimplePubSubPublisher publ
     return Results.Ok(new { success = true });
 });
 
+app.MapPost("api/pubsub/user-created", async ([FromServices]SimplePubSubPublisher publisher) =>
+{
+    var userEvent = new RedisExample.PubSubExamples.Events.UserCreatedEvent
+    {
+        UserId = Guid.NewGuid(),
+        UserName = "john_doe",
+        Email = "john.doe@example.com",
+        CreatedAt = DateTime.UtcNow,
+        Role = "Premium User"
+    };
 
-// app.MapPost("api/events/order/create", async (
-//     EventBus eventBus) =>
-// {
-//     await eventBus.PublishAsync(new OrderCreatedEvent("abc", 100));
-//     return Results.Ok(new { message = "Order created event published" });
-// });
-//
-// app.MapPost("api/events/payment/process", async (
-//     EventBus eventBus) =>
-// {
-//     await eventBus.PublishAsync(new PaymentProcessedEvent("abc", "abc", true));
-//     return Results.Ok(new { message = "Payment processed event published" });
-// });
+    await publisher.PublishUserCreatedEventAsync(userEvent);
+
+    return Results.Ok(new 
+    { 
+        success = true, 
+        message = "UserCreated event published",
+        userId = userEvent.UserId,
+        userName = userEvent.UserName
+    });
+});
+
 
 
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
