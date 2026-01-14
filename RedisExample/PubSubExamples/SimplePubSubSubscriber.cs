@@ -31,7 +31,7 @@ public class SimplePubSubSubscriber(RedisService redisService, ILogger<SimplePub
         logger.LogInformation("✅ 'notifications' kanalına abone olundu");
 
         // Background service çalışmaya devam etsin
-        await Task.Delay(Timeout.Infinite, stoppingToken);
+      //  await Task.Delay(Timeout.Infinite, stoppingToken);
     }
 
     private void ProcessMessage(string message)
