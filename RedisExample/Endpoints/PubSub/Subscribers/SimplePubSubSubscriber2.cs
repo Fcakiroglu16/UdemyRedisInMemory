@@ -1,12 +1,12 @@
-﻿#region
+#region
 
 using StackExchange.Redis;
 
 #endregion
 
-namespace RedisExample.PubSubExamples;
+namespace RedisExample.Endpoints.PubSub.Subscribers;
 
-public class SimplePubSubSubscriber(RedisService redisService, ILogger<SimplePubSubSubscriber> logger)
+public class SimplePubSubSubscriber2(RedisService redisService, ILogger<SimplePubSubSubscriber2> logger)
     : BackgroundService
 {
     private readonly ISubscriber _subscriber = redisService.GetSubscriber();

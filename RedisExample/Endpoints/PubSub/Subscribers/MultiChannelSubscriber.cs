@@ -1,10 +1,10 @@
-﻿#region
+#region
 
 using StackExchange.Redis;
 
 #endregion
 
-namespace RedisExample.PubSubExamples;
+namespace RedisExample.Endpoints.PubSub.Subscribers;
 
 public class MultiChannelSubscriber : BackgroundService
 {

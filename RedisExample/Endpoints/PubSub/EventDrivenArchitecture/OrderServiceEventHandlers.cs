@@ -1,4 +1,4 @@
-﻿namespace RedisExample.PubSubExamples.EventDrivenArchitecture;
+namespace RedisExample.Endpoints.PubSub.EventDrivenArchitecture;
 
 public class OrderServiceEventHandlers : BackgroundService
 {

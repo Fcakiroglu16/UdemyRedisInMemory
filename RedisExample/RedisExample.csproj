@@ -19,7 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Consumers\RedisStream\" />
       <Folder Include="Docker Compose\" />
+      <Folder Include="PubSubExamples\Publishers\" />
     </ItemGroup>
 
 </Project>

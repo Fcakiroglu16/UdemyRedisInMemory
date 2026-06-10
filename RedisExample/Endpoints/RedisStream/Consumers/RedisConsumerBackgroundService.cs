@@ -1,17 +1,17 @@
-﻿#region
+#region
 
 using StackExchange.Redis;
 
 #endregion
 
-namespace RedisExample.Consumers;
+namespace RedisExample.Endpoints.RedisStream.Consumers;
 
-public class RedisConsumerBackgroundService2(RedisService redisService, ILogger<RedisConsumerBackgroundService2> logger)
+public class RedisConsumerBackgroundService(RedisService redisService, ILogger<RedisConsumerBackgroundService> logger)
     : BackgroundService
 {
     private const string StreamName = "my-stream";
 
-    private const string GroupName = "my-consumer-group";
+    private const string GroupName = "my-consumer-group16";
 
     // Bu tüketici (worker) için benzersiz bir isim
     private readonly string _consumerName = $"consumer-{Environment.ProcessId}";
@@ -47,6 +47,8 @@ public class RedisConsumerBackgroundService2(RedisService redisService, ILogger<
             // StreamReadGroupAsync, XREADGROUP komutunu çalıştırır.
             // '>' : Bu tüketiciye daha önce hiç gönderilmemiş yeni mesajları oku.
             // block: 5000 : 5 saniye boyunca yeni mesaj gelmesini bekle (CPU'yu yormaz).
+
+
             var entries = await database.StreamReadGroupAsync(
                 StreamName,
                 GroupName,

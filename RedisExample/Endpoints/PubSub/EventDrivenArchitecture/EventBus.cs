@@ -1,11 +1,11 @@
-﻿#region
+#region
 
 using StackExchange.Redis;
 using System.Text.Json;
 
 #endregion
 
-namespace RedisExample.PubSubExamples.EventDrivenArchitecture;
+namespace RedisExample.Endpoints.PubSub.EventDrivenArchitecture;
 
 public class EventBus(RedisService redisService, ILogger<EventBus> logger)
 {

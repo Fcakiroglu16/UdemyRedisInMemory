@@ -1,4 +1,4 @@
-﻿namespace RedisExample.PubSubExamples.EventDrivenArchitecture;
+namespace RedisExample.Endpoints.PubSub.EventDrivenArchitecture;
 
 public class InventoryServiceEventHandlers(EventBus eventBus, ILogger<InventoryServiceEventHandlers> logger)
     : BackgroundService

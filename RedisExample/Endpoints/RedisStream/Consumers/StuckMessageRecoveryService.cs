@@ -1,4 +1,4 @@
-﻿// Services/StuckMessageRecoveryService.cs
+// Services/StuckMessageRecoveryService.cs
 
 #region
 
@@ -6,7 +6,7 @@ using StackExchange.Redis;
 
 #endregion
 
-namespace RedisExample.Consumers;
+namespace RedisExample.Endpoints.RedisStream.Consumers;
 
 public class StuckMessageRecoveryService(
     RedisService redisService,

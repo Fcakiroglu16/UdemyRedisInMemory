@@ -1,19 +1,19 @@
-﻿#region
+#region
 
 using StackExchange.Redis;
 
 #endregion
 
-namespace RedisExample.Consumers;
+namespace RedisExample.Endpoints.RedisStream.Consumers;
 
-public class RedisConsumerBlockedBackgroundService(
+public class RedisConsumerBackgroundServiceErrorExample(
     RedisService redisService,
-    ILogger<RedisConsumerBackgroundService> logger)
+    ILogger<RedisConsumerBackgroundServiceErrorExample> logger)
     : BackgroundService
 {
-    private const string StreamName = "my-stream";
+    private const string StreamName = "my-stream-error";
 
-    private const string GroupName = "my-consumer-group16";
+    private const string GroupName = "my-consumer-group";
 
     // Bu tüketici (worker) için benzersiz bir isim
     private readonly string _consumerName = $"consumer-{Environment.ProcessId}";
@@ -49,8 +49,6 @@ public class RedisConsumerBlockedBackgroundService(
             // StreamReadGroupAsync, XREADGROUP komutunu çalıştırır.
             // '>' : Bu tüketiciye daha önce hiç gönderilmemiş yeni mesajları oku.
             // block: 5000 : 5 saniye boyunca yeni mesaj gelmesini bekle (CPU'yu yormaz).
-
-
             var entries = await database.StreamReadGroupAsync(
                 StreamName,
                 GroupName,
@@ -63,14 +61,22 @@ public class RedisConsumerBlockedBackgroundService(
                 //logger.LogInformation("Yeni mesaj yok, bekleniyor...");
                 continue;
 
-            //logger.LogInformation("{Count} adet yeni mesaj işleniyor...", entries.Length);
+            logger.LogInformation("{Count} adet yeni mesaj işleniyor...", entries.Length);
 
+            var i = 0;
             foreach (var entry in entries)
             {
-                //logger.LogInformation("--> Mesaj ID: {MessageId}", entry.Id);
-                var messageContent = entry.Values.FirstOrDefault(x => x.Name == "message_content").Value;
-                logger.LogInformation("    İçerik: {Content}", messageContent);
-                await database.StreamAcknowledgeAsync(StreamName, GroupName, entry.Id);
+                i++;
+
+                if (i % 2 == 0)
+                {
+                    logger.LogInformation("--> Mesaj ID: {MessageId}", entry.Id);
+
+
+                    var messageContent = entry.Values.FirstOrDefault(x => x.Name == "message_content").Value;
+                    logger.LogInformation("    İçerik: {Content}", messageContent);
+                    await database.StreamAcknowledgeAsync(StreamName, GroupName, entry.Id);
+                }
             }
         }
     }

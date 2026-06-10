@@ -1,11 +1,11 @@
-﻿#region
+#region
 
 using StackExchange.Redis;
 using System.Text.Json;
 
 #endregion
 
-namespace RedisExample.PubSubExamples;
+namespace RedisExample.Endpoints.PubSub.Publishers;
 
 public class SimplePubSubPublisher(RedisService redisService, ILogger<SimplePubSubPublisher> logger)
 {
