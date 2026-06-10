@@ -1,5 +1,6 @@
 ﻿#region
 
+using Microsoft.AspNetCore.Mvc;
 using RedisExample;
 using RedisExample.Endpoints.PubSub;
 using RedisExample.Endpoints.PubSub.EventDrivenArchitecture;
@@ -38,13 +39,14 @@ builder.Services.AddHostedService<SimplePubSubSubscriber>();
 builder.Services.AddHostedService<SimplePubSubSubscriber2>();
 builder.Services.AddSingleton<SimplePubSubPublisher>();
 
-builder.Services.AddHostedService<PatternSubscriber>();
+// builder.Services.AddHostedService<InventoryServiceEventHandlers>();
+// builder.Services.AddHostedService<OrderServiceEventHandlers>();
+// builder.Services.AddHostedService<PatternSubscriber>();
+// builder.Services.AddSingleton<EventBus>();
 
 
-builder.Services.AddSingleton<EventBus>();
-builder.Services.AddHostedService<InventoryServiceEventHandlers>();
-builder.Services.AddHostedService<OrderServiceEventHandlers>();
-
+builder.Services.AddSingleton<SimplePubSubPublisher>();
+builder.Services.AddHostedService<SimplePubSubSubscriber>();
 
 var app = builder.Build();
 
@@ -65,5 +67,6 @@ app.MapPubSubEndpoints();
 
 if (app.Environment.IsDevelopment()) app.MapOpenApi();
 
+app.MapScalarApiReference();
 
 await app.RunAsync();
